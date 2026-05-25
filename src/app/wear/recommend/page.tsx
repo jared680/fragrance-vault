@@ -77,7 +77,7 @@ export default function RecommendPage() {
   }
 
   return (
-    <main style={styles.main}>
+    <main className="page-main">
       <header style={styles.header}>
         <Link href="/dashboard" style={styles.backBtn}>← Back</Link>
         <h1 className="font-display" style={styles.title}>
@@ -177,7 +177,7 @@ function RecommendCard({ rec, rank }: { rec: Recommendation; rank: number }) {
 }
 
 const styles: Record<string, React.CSSProperties> = {
-  main: { padding: '24px', paddingTop: '56px', maxWidth: '480px', margin: '0 auto' },
+  main: { padding: 0 },
   header: { marginBottom: '28px' },
   backBtn: { display: 'block', color: 'var(--text-muted)', fontSize: '13px', textDecoration: 'none', marginBottom: '16px' },
   title: { fontSize: '36px', fontWeight: 400, color: 'var(--text-primary)', lineHeight: 1.2, marginBottom: '8px' },

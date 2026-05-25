@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
+import { ThemeToggle } from '@/components/layout/ThemeToggle'
 
 export default function SignupPage() {
   const [email, setEmail] = useState('')
@@ -54,6 +55,7 @@ export default function SignupPage() {
 
   return (
     <main style={styles.main}>
+      <div style={{ position: 'absolute', top: 20, right: 20 }}><ThemeToggle /></div>
       <div style={styles.ambient} />
       <div className="animate-fade-up" style={styles.card}>
         <div style={styles.header}>

@@ -36,7 +36,7 @@ export default function WearPage() {
   }, {})
 
   return (
-    <main style={styles.main}>
+    <main className="page-main">
       <header style={styles.header}>
         <h1 className="font-display" style={styles.title}><em>Wear History</em></h1>
         <Link href="/wear/log" style={styles.logBtn}>+ Log wear</Link>
@@ -87,7 +87,7 @@ export default function WearPage() {
 }
 
 const styles: Record<string, React.CSSProperties> = {
-  main: { padding: '24px', paddingTop: '56px', maxWidth: '480px', margin: '0 auto' },
+  main: { padding: 0 },
   header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' },
   title: { fontSize: '32px', fontWeight: 400, color: 'var(--text-primary)' },
   logBtn: {

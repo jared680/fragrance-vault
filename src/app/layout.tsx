@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
+import { ThemeProvider } from '@/components/providers/ThemeProvider'
 
 export const metadata: Metadata = {
   title: 'Fragrance Vault',
@@ -7,13 +8,12 @@ export const metadata: Metadata = {
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
-    statusBarStyle: 'black-translucent',
+    statusBarStyle: 'default',
     title: 'Fragrance Vault',
   },
 }
 
 export const viewport: Viewport = {
-  themeColor: '#0c0c0e',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
@@ -35,7 +35,14 @@ export default function RootLayout({
         />
       </head>
       <body className="grain">
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem={false}
+          disableTransitionOnChange={false}
+        >
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   )

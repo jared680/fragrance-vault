@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
+import { ThemeToggle } from '@/components/layout/ThemeToggle'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -17,16 +18,9 @@ export default function LoginPage() {
     e.preventDefault()
     setLoading(true)
     setError(null)
-
     const { error } = await supabase.auth.signInWithPassword({ email, password })
-
-    if (error) {
-      setError(error.message)
-      setLoading(false)
-    } else {
-      router.push('/dashboard')
-      router.refresh()
-    }
+    if (error) { setError(error.message); setLoading(false) }
+    else { router.push('/dashboard'); router.refresh() }
   }
 
   const handleGoogle = async () => {
@@ -38,6 +32,10 @@ export default function LoginPage() {
 
   return (
     <main style={styles.main}>
+      <div style={{ position: 'absolute', top: 20, right: 20 }}>
+        <ThemeToggle />
+      </div>
+
       <div style={styles.ambient} />
 
       <div className="animate-fade-up" style={styles.card}>
@@ -50,25 +48,13 @@ export default function LoginPage() {
         <form onSubmit={handleLogin} style={styles.form}>
           <div style={styles.field}>
             <label style={styles.label}>Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              required
-              style={styles.input}
-              placeholder="you@example.com"
-            />
+            <input type="email" value={email} onChange={e => setEmail(e.target.value)}
+              required style={styles.input} placeholder="you@example.com" />
           </div>
           <div style={styles.field}>
             <label style={styles.label}>Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              required
-              style={styles.input}
-              placeholder="••••••••"
-            />
+            <input type="password" value={password} onChange={e => setPassword(e.target.value)}
+              required style={styles.input} placeholder="••••••••" />
           </div>
 
           {error && <p style={styles.error}>{error}</p>}
@@ -95,8 +81,7 @@ export default function LoginPage() {
         </button>
 
         <p style={styles.footer}>
-          No account?{' '}
-          <Link href="/auth/signup" style={styles.link}>Create one</Link>
+          No account? <Link href="/auth/signup" style={styles.link}>Create one</Link>
         </p>
       </div>
     </main>
@@ -105,118 +90,52 @@ export default function LoginPage() {
 
 const styles: Record<string, React.CSSProperties> = {
   main: {
-    minHeight: '100dvh',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '24px',
-    background: 'var(--bg-primary)',
-    position: 'relative',
-    overflow: 'hidden',
+    minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center',
+    padding: '24px', background: 'var(--bg-primary)', position: 'relative', overflow: 'hidden',
   },
   ambient: {
-    position: 'absolute',
-    top: '-100px',
-    right: '-100px',
-    width: '400px',
-    height: '400px',
+    position: 'absolute', top: '-100px', right: '-100px', width: '400px', height: '400px',
     borderRadius: '50%',
-    background: 'radial-gradient(circle, rgba(201,169,110,0.05) 0%, transparent 70%)',
+    background: 'radial-gradient(circle, var(--accent-glow) 0%, transparent 70%)',
     pointerEvents: 'none',
   },
   card: {
-    width: '100%',
-    maxWidth: '380px',
-    background: 'var(--bg-card)',
-    border: '1px solid var(--border-subtle)',
-    borderRadius: 'var(--radius-xl)',
-    padding: '32px 28px',
+    width: '100%', maxWidth: '380px', background: 'var(--bg-card)',
+    border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-xl)',
+    padding: '32px 28px', boxShadow: 'var(--shadow-md)',
   },
   header: { marginBottom: '28px' },
-  backLink: {
-    color: 'var(--text-muted)',
-    fontSize: '13px',
-    textDecoration: 'none',
-    display: 'block',
-    marginBottom: '20px',
-  },
-  title: {
-    fontSize: '32px',
-    fontWeight: 400,
-    color: 'var(--text-primary)',
-    marginBottom: '6px',
-    fontStyle: 'italic',
-  },
-  subtitle: {
-    color: 'var(--text-secondary)',
-    fontSize: '14px',
-    fontWeight: 300,
-  },
-  form: { display: 'flex', flexDirection: 'column', gap: '16px' },
-  field: { display: 'flex', flexDirection: 'column', gap: '6px' },
-  label: { fontSize: '13px', color: 'var(--text-secondary)', fontWeight: 500 },
+  backLink: { color: 'var(--text-muted)', fontSize: '13px', textDecoration: 'none', display: 'block', marginBottom: '20px' },
+  title:    { fontSize: '32px', fontWeight: 400, color: 'var(--text-primary)', marginBottom: '6px', fontStyle: 'italic' },
+  subtitle: { color: 'var(--text-secondary)', fontSize: '14px', fontWeight: 300 },
+  form:     { display: 'flex', flexDirection: 'column', gap: '16px' },
+  field:    { display: 'flex', flexDirection: 'column', gap: '6px' },
+  label:    { fontSize: '13px', color: 'var(--text-secondary)', fontWeight: 500 },
   input: {
-    padding: '12px 14px',
-    background: 'var(--bg-secondary)',
-    border: '1px solid var(--border-medium)',
-    borderRadius: 'var(--radius-md)',
-    color: 'var(--text-primary)',
-    fontSize: '15px',
-    outline: 'none',
-    width: '100%',
+    padding: '12px 14px', background: 'var(--bg-secondary)',
+    border: '1px solid var(--border-medium)', borderRadius: 'var(--radius-md)',
+    color: 'var(--text-primary)', fontSize: '15px', outline: 'none', width: '100%',
+    fontFamily: 'var(--font-body)',
   },
   error: {
-    color: 'var(--error)',
-    fontSize: '13px',
-    background: 'rgba(194,107,107,0.1)',
-    padding: '10px 14px',
-    borderRadius: 'var(--radius-sm)',
+    color: 'var(--error)', fontSize: '13px', background: 'rgba(184,85,85,0.1)',
+    padding: '10px 14px', borderRadius: 'var(--radius-sm)',
   },
   primaryBtn: {
-    padding: '13px',
-    background: 'var(--accent)',
-    color: '#0c0c0e',
-    border: 'none',
-    borderRadius: 'var(--radius-md)',
-    fontWeight: 600,
-    fontSize: '15px',
-    cursor: 'pointer',
-    fontFamily: 'var(--font-body)',
-    marginTop: '4px',
+    padding: '13px', background: 'var(--accent)', color: '#0c0c0e', border: 'none',
+    borderRadius: 'var(--radius-md)', fontWeight: 600, fontSize: '15px', cursor: 'pointer',
+    fontFamily: 'var(--font-body)', marginTop: '4px', boxShadow: '0 2px 8px var(--accent-dim)',
   },
-  divider: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '12px',
-    margin: '20px 0',
-  },
-  dividerLine: {
-    flex: 1,
-    height: '1px',
-    background: 'var(--border-subtle)',
-  },
+  divider:     { display: 'flex', alignItems: 'center', gap: '12px', margin: '20px 0' },
+  dividerLine: { flex: 1, height: '1px', background: 'var(--border-subtle)' },
   dividerText: { color: 'var(--text-muted)', fontSize: '12px' },
   googleBtn: {
-    width: '100%',
-    padding: '13px',
-    background: 'var(--bg-elevated)',
-    color: 'var(--text-primary)',
-    border: '1px solid var(--border-medium)',
-    borderRadius: 'var(--radius-md)',
-    fontWeight: 400,
-    fontSize: '15px',
-    cursor: 'pointer',
-    fontFamily: 'var(--font-body)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '10px',
+    width: '100%', padding: '13px', background: 'var(--bg-elevated)',
+    color: 'var(--text-primary)', border: '1px solid var(--border-medium)',
+    borderRadius: 'var(--radius-md)', fontWeight: 400, fontSize: '15px', cursor: 'pointer',
+    fontFamily: 'var(--font-body)', display: 'flex', alignItems: 'center',
+    justifyContent: 'center', gap: '10px',
   },
-  footer: {
-    textAlign: 'center',
-    color: 'var(--text-muted)',
-    fontSize: '13px',
-    marginTop: '20px',
-  },
-  link: { color: 'var(--accent)', textDecoration: 'none' },
+  footer: { textAlign: 'center', color: 'var(--text-muted)', fontSize: '13px', marginTop: '20px' },
+  link:   { color: 'var(--accent)', textDecoration: 'none' },
 }

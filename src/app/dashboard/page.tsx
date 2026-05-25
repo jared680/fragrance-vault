@@ -38,7 +38,6 @@ export default function DashboardPage() {
       if (wearRes.data) setRecentWears(wearRes.data)
       setLoading(false)
     }
-
     loadDashboard()
   }, [])
 
@@ -56,11 +55,11 @@ export default function DashboardPage() {
 
   if (loading) return <LoadingSkeleton />
 
-  const ownedCount = collection.filter(c => c.ownership_type === 'owned').length
+  const ownedCount  = collection.filter(c => c.ownership_type === 'owned').length
   const wishlistCount = collection.filter(c => c.ownership_type === 'wishlist').length
 
   return (
-    <main style={styles.main}>
+    <main className="page-main" style={{ position: 'relative' }}>
       {/* Header */}
       <header style={styles.header}>
         <div>
@@ -92,8 +91,8 @@ export default function DashboardPage() {
       {/* Stats row */}
       <div style={styles.statsRow}>
         <StatCard label="In collection" value={ownedCount} />
-        <StatCard label="Wishlisted" value={wishlistCount} />
-        <StatCard label="Wears logged" value={recentWears.length > 0 ? '✓' : '0'} />
+        <StatCard label="Wishlisted"    value={wishlistCount} />
+        <StatCard label="Wears logged"  value={recentWears.length > 0 ? recentWears.length : '0'} />
       </div>
 
       {/* Recent wears */}
@@ -116,16 +115,12 @@ export default function DashboardPage() {
               <div key={wear.id} style={styles.wearItem}>
                 <div style={styles.wearDot} />
                 <div style={{ flex: 1 }}>
-                  <p style={styles.wearName}>
-                    {wear.fragrance?.name ?? 'Unknown'}
-                  </p>
+                  <p style={styles.wearName}>{wear.fragrance?.name ?? 'Unknown'}</p>
                   <p style={styles.wearMeta}>
                     {wear.fragrance?.brand} · {new Date(wear.worn_at).toLocaleDateString('en-ZA', { month: 'short', day: 'numeric' })}
                   </p>
                 </div>
-                {wear.occasion && (
-                  <span style={styles.badge}>{wear.occasion}</span>
-                )}
+                {wear.occasion && <span style={styles.badge}>{wear.occasion}</span>}
               </div>
             ))}
           </div>
@@ -136,12 +131,8 @@ export default function DashboardPage() {
       <section style={styles.section}>
         <h3 style={styles.sectionTitle}>Quick actions</h3>
         <div style={styles.quickActions}>
-          <Link href="/collection/add" style={styles.actionBtn}>
-            <span>+ Add fragrance</span>
-          </Link>
-          <Link href="/wear/log" style={styles.actionBtnSecondary}>
-            <span>Log a wear</span>
-          </Link>
+          <Link href="/collection/add" style={styles.actionBtn}>+ Add fragrance</Link>
+          <Link href="/wear/log"       style={styles.actionBtnSecondary}>Log a wear</Link>
         </div>
       </section>
     </main>
@@ -157,6 +148,7 @@ function StatCard({ label, value }: { label: string; value: string | number }) {
       borderRadius: 'var(--radius-md)',
       padding: '16px 12px',
       textAlign: 'center',
+      boxShadow: 'var(--shadow-sm)',
     }}>
       <p style={{ fontSize: '22px', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '4px' }}>
         {value}
@@ -170,7 +162,7 @@ function StatCard({ label, value }: { label: string; value: string | number }) {
 
 function LoadingSkeleton() {
   return (
-    <main style={{ padding: '24px', paddingTop: '60px' }}>
+    <main className="page-main">
       <div style={{ height: '40px', background: 'var(--bg-card)', borderRadius: '8px', marginBottom: '24px' }} />
       <div style={{ height: '140px', background: 'var(--bg-card)', borderRadius: '18px', marginBottom: '16px' }} />
       <div style={{ display: 'flex', gap: '12px', marginBottom: '24px' }}>
@@ -181,44 +173,26 @@ function LoadingSkeleton() {
 }
 
 const styles: Record<string, React.CSSProperties> = {
-  main: {
-    padding: '24px',
-    paddingTop: '56px',
-    maxWidth: '480px',
-    margin: '0 auto',
-    position: 'relative',
-  },
   header: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
     marginBottom: '28px',
   },
   greeting: { fontSize: '13px', color: 'var(--text-muted)', marginBottom: '4px' },
   title: { fontSize: '32px', fontWeight: 400, color: 'var(--text-primary)', fontStyle: 'italic' },
   signOutBtn: {
-    background: 'transparent',
-    border: '1px solid var(--border-subtle)',
-    color: 'var(--text-muted)',
-    fontSize: '12px',
-    padding: '6px 12px',
-    borderRadius: 'var(--radius-sm)',
-    cursor: 'pointer',
-    fontFamily: 'var(--font-body)',
+    background: 'transparent', border: '1px solid var(--border-subtle)',
+    color: 'var(--text-muted)', fontSize: '12px', padding: '6px 12px',
+    borderRadius: 'var(--radius-sm)', cursor: 'pointer', fontFamily: 'var(--font-body)',
   },
   ambient: {
-    position: 'absolute',
-    top: 0,
-    right: '-60px',
-    width: '300px',
-    height: '300px',
-    borderRadius: '50%',
-    background: 'radial-gradient(circle, rgba(201,169,110,0.06) 0%, transparent 70%)',
+    position: 'absolute', top: 0, right: '-60px',
+    width: '300px', height: '300px', borderRadius: '50%',
+    background: 'radial-gradient(circle, var(--accent-glow) 0%, transparent 70%)',
     pointerEvents: 'none',
   },
   recommendCard: {
     display: 'block',
-    background: 'linear-gradient(135deg, rgba(201,169,110,0.15) 0%, rgba(201,169,110,0.05) 100%)',
+    background: 'linear-gradient(135deg, var(--accent-dim) 0%, transparent 100%)',
     border: '1px solid rgba(201,169,110,0.25)',
     borderRadius: 'var(--radius-xl)',
     padding: '28px 24px',
@@ -226,129 +200,72 @@ const styles: Record<string, React.CSSProperties> = {
     marginBottom: '20px',
     position: 'relative',
     overflow: 'hidden',
+    boxShadow: 'var(--shadow-sm)',
   },
   recommendInner: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    position: 'relative',
-    zIndex: 1,
+    display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end',
+    position: 'relative', zIndex: 1,
   },
   recommendLabel: {
-    fontSize: '11px',
-    color: 'var(--accent)',
-    letterSpacing: '1px',
-    textTransform: 'uppercase',
-    marginBottom: '10px',
-    fontWeight: 500,
+    fontSize: '11px', color: 'var(--accent)', letterSpacing: '1px',
+    textTransform: 'uppercase', marginBottom: '10px', fontWeight: 500,
   },
   recommendTitle: {
-    fontSize: '28px',
-    fontWeight: 400,
-    color: 'var(--text-primary)',
-    lineHeight: 1.2,
-    fontStyle: 'italic',
+    fontSize: '28px', fontWeight: 400, color: 'var(--text-primary)',
+    lineHeight: 1.2, fontStyle: 'italic',
   },
-  recommendArrow: {
-    fontSize: '24px',
-    color: 'var(--accent)',
-    marginBottom: '4px',
-  },
+  recommendArrow: { fontSize: '24px', color: 'var(--accent)', marginBottom: '4px' },
   recommendGlow: {
-    position: 'absolute',
-    top: '-40px',
-    right: '-40px',
-    width: '160px',
-    height: '160px',
-    borderRadius: '50%',
-    background: 'radial-gradient(circle, rgba(201,169,110,0.12) 0%, transparent 70%)',
+    position: 'absolute', top: '-40px', right: '-40px',
+    width: '160px', height: '160px', borderRadius: '50%',
+    background: 'radial-gradient(circle, var(--accent-glow) 0%, transparent 70%)',
   },
-  statsRow: {
-    display: 'flex',
-    gap: '10px',
-    marginBottom: '28px',
-  },
+  statsRow: { display: 'flex', gap: '10px', marginBottom: '28px' },
   section: { marginBottom: '28px' },
   sectionHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    display: 'flex', justifyContent: 'space-between', alignItems: 'center',
     marginBottom: '14px',
   },
   sectionTitle: {
-    fontSize: '13px',
-    fontWeight: 500,
-    color: 'var(--text-secondary)',
-    textTransform: 'uppercase',
-    letterSpacing: '0.8px',
+    fontSize: '13px', fontWeight: 500, color: 'var(--text-secondary)',
+    textTransform: 'uppercase', letterSpacing: '0.8px',
   },
-  seeAll: {
-    fontSize: '13px',
-    color: 'var(--accent)',
-    textDecoration: 'none',
-  },
+  seeAll: { fontSize: '13px', color: 'var(--accent)', textDecoration: 'none' },
   emptyState: {
-    background: 'var(--bg-card)',
-    border: '1px solid var(--border-subtle)',
-    borderRadius: 'var(--radius-md)',
-    padding: '24px',
-    textAlign: 'center',
+    background: 'var(--bg-card)', border: '1px solid var(--border-subtle)',
+    borderRadius: 'var(--radius-md)', padding: '24px', textAlign: 'center',
   },
   wearList: {
-    background: 'var(--bg-card)',
-    border: '1px solid var(--border-subtle)',
-    borderRadius: 'var(--radius-lg)',
-    overflow: 'hidden',
+    background: 'var(--bg-card)', border: '1px solid var(--border-subtle)',
+    borderRadius: 'var(--radius-lg)', overflow: 'hidden',
+    boxShadow: 'var(--shadow-sm)',
   },
   wearItem: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '14px',
-    padding: '14px 16px',
-    borderBottom: '1px solid var(--border-subtle)',
+    display: 'flex', alignItems: 'center', gap: '14px',
+    padding: '14px 16px', borderBottom: '1px solid var(--border-subtle)',
   },
   wearDot: {
-    width: '8px',
-    height: '8px',
-    borderRadius: '50%',
-    background: 'var(--accent)',
-    flexShrink: 0,
+    width: '8px', height: '8px', borderRadius: '50%',
+    background: 'var(--accent)', flexShrink: 0,
   },
   wearName: { fontSize: '14px', color: 'var(--text-primary)', fontWeight: 500, marginBottom: '2px' },
   wearMeta: { fontSize: '12px', color: 'var(--text-muted)' },
   badge: {
-    fontSize: '11px',
-    padding: '3px 8px',
-    background: 'var(--bg-elevated)',
-    border: '1px solid var(--border-subtle)',
-    borderRadius: '20px',
-    color: 'var(--text-secondary)',
-    whiteSpace: 'nowrap',
+    fontSize: '11px', padding: '3px 8px', background: 'var(--bg-elevated)',
+    border: '1px solid var(--border-subtle)', borderRadius: '20px',
+    color: 'var(--text-secondary)', whiteSpace: 'nowrap',
   },
   quickActions: { display: 'flex', gap: '10px' },
   actionBtn: {
-    flex: 1,
-    padding: '13px',
-    background: 'var(--accent)',
-    color: '#0c0c0e',
-    borderRadius: 'var(--radius-md)',
-    textDecoration: 'none',
-    fontWeight: 600,
-    fontSize: '14px',
-    textAlign: 'center',
-    display: 'block',
+    flex: 1, padding: '13px', background: 'var(--accent)', color: '#0c0c0e',
+    borderRadius: 'var(--radius-md)', textDecoration: 'none', fontWeight: 600,
+    fontSize: '14px', textAlign: 'center', display: 'block',
+    boxShadow: '0 2px 8px var(--accent-dim)',
   },
   actionBtnSecondary: {
-    flex: 1,
-    padding: '13px',
-    background: 'var(--bg-card)',
-    color: 'var(--text-primary)',
-    border: '1px solid var(--border-medium)',
-    borderRadius: 'var(--radius-md)',
-    textDecoration: 'none',
-    fontWeight: 400,
-    fontSize: '14px',
-    textAlign: 'center',
-    display: 'block',
+    flex: 1, padding: '13px', background: 'var(--bg-card)', color: 'var(--text-primary)',
+    border: '1px solid var(--border-medium)', borderRadius: 'var(--radius-md)',
+    textDecoration: 'none', fontWeight: 400, fontSize: '14px',
+    textAlign: 'center', display: 'block',
   },
 }

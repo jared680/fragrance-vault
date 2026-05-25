@@ -85,7 +85,7 @@ export default function AnalyticsPage() {
   }, [])
 
   if (loading) return (
-    <main style={styles.main}>
+    <main className="page-main">
       <div style={styles.skeleton} />
       <div style={{ ...styles.skeleton, height: '200px' }} />
       <div style={{ ...styles.skeleton, height: '200px' }} />
@@ -95,14 +95,14 @@ export default function AnalyticsPage() {
   if (!analytics) return null
 
   return (
-    <main style={styles.main}>
+    <main className="page-main">
       <header style={styles.header}>
         <h1 className="font-display" style={styles.title}><em>Analytics</em></h1>
         <p style={styles.subtitle}>Your fragrance story at a glance</p>
       </header>
 
       {/* Top stats */}
-      <div style={styles.statsGrid}>
+      <div className="stats-grid-4" style={{marginBottom: "28px"}}>
         <StatBox label="In vault" value={analytics.totalOwned} />
         <StatBox label="Total wears" value={analytics.totalWears} />
         <StatBox label="Unique worn" value={analytics.uniqueFragrancesWorn} />
@@ -200,11 +200,11 @@ function StatBox({ label, value }: { label: string; value: string | number }) {
 }
 
 const styles: Record<string, React.CSSProperties> = {
-  main: { padding: '24px', paddingTop: '56px', maxWidth: '480px', margin: '0 auto' },
+  main: { padding: 0 },
   header: { marginBottom: '24px' },
   title: { fontSize: '32px', fontWeight: 400, color: 'var(--text-primary)', marginBottom: '4px' },
   subtitle: { fontSize: '14px', color: 'var(--text-secondary)', fontWeight: 300 },
-  statsGrid: { display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px', marginBottom: '28px' },
+  statsGrid: {},
   section: { marginBottom: '24px' },
   sectionTitle: { fontSize: '12px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.8px', fontWeight: 500, marginBottom: '12px' },
   card: { background: 'var(--bg-card)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-lg)', overflow: 'hidden' },

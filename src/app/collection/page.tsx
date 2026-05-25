@@ -43,13 +43,13 @@ export default function CollectionPage() {
   })
 
   const tabCounts: Record<Tab, number> = {
-    owned: items.filter(i => i.ownership_type === 'owned').length,
+    owned:    items.filter(i => i.ownership_type === 'owned').length,
     wishlist: items.filter(i => i.ownership_type === 'wishlist').length,
-    sampled: items.filter(i => i.ownership_type === 'sampled').length,
+    sampled:  items.filter(i => i.ownership_type === 'sampled').length,
   }
 
   return (
-    <main style={styles.main}>
+    <main className="page-main">
       <header style={styles.header}>
         <h1 className="font-display" style={styles.title}><em>Collection</em></h1>
         <Link href="/collection/add" style={styles.addBtn}>+ Add</Link>
@@ -72,14 +72,8 @@ export default function CollectionPage() {
       {/* Tabs */}
       <div style={styles.tabs}>
         {(['owned', 'wishlist', 'sampled'] as Tab[]).map(t => (
-          <button
-            key={t}
-            onClick={() => setTab(t)}
-            style={{
-              ...styles.tab,
-              ...(tab === t ? styles.tabActive : {}),
-            }}
-          >
+          <button key={t} onClick={() => setTab(t)}
+            style={{ ...styles.tab, ...(tab === t ? styles.tabActive : {}) }}>
             {t.charAt(0).toUpperCase() + t.slice(1)}
             <span style={styles.tabCount}>{tabCounts[t]}</span>
           </button>
@@ -88,10 +82,8 @@ export default function CollectionPage() {
 
       {/* Grid */}
       {loading ? (
-        <div style={styles.grid}>
-          {[1,2,3,4,5,6].map(i => (
-            <div key={i} style={styles.skeletonCard} />
-          ))}
+        <div className="collection-grid">
+          {[1,2,3,4,5,6].map(i => <div key={i} style={styles.skeletonCard} />)}
         </div>
       ) : filtered.length === 0 ? (
         <div style={styles.empty}>
@@ -106,10 +98,8 @@ export default function CollectionPage() {
           )}
         </div>
       ) : (
-        <div style={styles.grid}>
-          {filtered.map(item => (
-            <FragranceCard key={item.id} item={item} />
-          ))}
+        <div className="collection-grid">
+          {filtered.map(item => <FragranceCard key={item.id} item={item} />)}
         </div>
       )}
     </main>
@@ -122,19 +112,14 @@ function FragranceCard({ item }: { item: UserCollection }) {
 
   return (
     <Link href={`/collection/${item.id}`} style={styles.card}>
-      {/* Image or placeholder */}
       <div style={styles.cardImage}>
         {f?.image_url ? (
           <img src={f.image_url} alt={f.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         ) : (
           <span className="font-display" style={styles.cardInitials}>{initials}</span>
         )}
-        {item.favorite && (
-          <div style={styles.favBadge}>♥</div>
-        )}
+        {item.favorite && <div style={styles.favBadge}>♥</div>}
       </div>
-
-      {/* Info */}
       <div style={styles.cardInfo}>
         <p style={styles.cardBrand}>{f?.brand ?? 'Unknown'}</p>
         <p style={styles.cardName}>{f?.name ?? 'Unknown'}</p>
@@ -147,162 +132,69 @@ function FragranceCard({ item }: { item: UserCollection }) {
 }
 
 const styles: Record<string, React.CSSProperties> = {
-  main: {
-    padding: '24px',
-    paddingTop: '56px',
-    maxWidth: '480px',
-    margin: '0 auto',
-  },
-  header: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '20px',
-  },
-  title: {
-    fontSize: '32px',
-    fontWeight: 400,
-    color: 'var(--text-primary)',
-  },
+  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' },
+  title:  { fontSize: '32px', fontWeight: 400, color: 'var(--text-primary)' },
   addBtn: {
-    padding: '8px 16px',
-    background: 'var(--accent)',
-    color: '#0c0c0e',
-    borderRadius: 'var(--radius-md)',
-    textDecoration: 'none',
-    fontWeight: 600,
-    fontSize: '14px',
+    padding: '8px 16px', background: 'var(--accent)', color: '#0c0c0e',
+    borderRadius: 'var(--radius-md)', textDecoration: 'none', fontWeight: 600, fontSize: '14px',
+    boxShadow: '0 2px 8px var(--accent-dim)',
   },
-  searchWrap: {
-    position: 'relative',
-    marginBottom: '16px',
-  },
-  searchIcon: {
-    position: 'absolute',
-    left: '12px',
-    top: '50%',
-    transform: 'translateY(-50%)',
-  },
+  searchWrap:  { position: 'relative', marginBottom: '16px' },
+  searchIcon:  { position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' },
   searchInput: {
-    width: '100%',
-    padding: '11px 14px 11px 38px',
-    background: 'var(--bg-card)',
-    border: '1px solid var(--border-medium)',
-    borderRadius: 'var(--radius-md)',
-    color: 'var(--text-primary)',
-    fontSize: '14px',
-    outline: 'none',
-    fontFamily: 'var(--font-body)',
+    width: '100%', padding: '11px 14px 11px 38px',
+    background: 'var(--bg-card)', border: '1px solid var(--border-medium)',
+    borderRadius: 'var(--radius-md)', color: 'var(--text-primary)', fontSize: '14px',
+    outline: 'none', fontFamily: 'var(--font-body)',
   },
   tabs: {
-    display: 'flex',
-    gap: '6px',
-    marginBottom: '20px',
-    background: 'var(--bg-card)',
-    border: '1px solid var(--border-subtle)',
-    borderRadius: 'var(--radius-md)',
-    padding: '4px',
+    display: 'flex', gap: '6px', marginBottom: '20px',
+    background: 'var(--bg-card)', border: '1px solid var(--border-subtle)',
+    borderRadius: 'var(--radius-md)', padding: '4px',
   },
   tab: {
-    flex: 1,
-    padding: '8px 12px',
-    background: 'transparent',
-    border: 'none',
-    borderRadius: '8px',
-    color: 'var(--text-muted)',
-    fontSize: '13px',
-    cursor: 'pointer',
-    fontFamily: 'var(--font-body)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '6px',
+    flex: 1, padding: '8px 12px', background: 'transparent', border: 'none',
+    borderRadius: '8px', color: 'var(--text-muted)', fontSize: '13px', cursor: 'pointer',
+    fontFamily: 'var(--font-body)', display: 'flex', alignItems: 'center',
+    justifyContent: 'center', gap: '6px',
   },
-  tabActive: {
-    background: 'var(--bg-elevated)',
-    color: 'var(--text-primary)',
-  },
+  tabActive: { background: 'var(--bg-elevated)', color: 'var(--text-primary)' },
   tabCount: {
-    fontSize: '11px',
-    padding: '1px 6px',
-    background: 'var(--bg-secondary)',
-    borderRadius: '10px',
-    color: 'var(--text-muted)',
-  },
-  grid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(2, 1fr)',
-    gap: '12px',
+    fontSize: '11px', padding: '1px 6px', background: 'var(--bg-secondary)',
+    borderRadius: '10px', color: 'var(--text-muted)',
   },
   skeletonCard: {
-    height: '200px',
-    background: 'var(--bg-card)',
-    borderRadius: 'var(--radius-lg)',
-    border: '1px solid var(--border-subtle)',
+    height: '200px', background: 'var(--bg-card)',
+    borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-subtle)',
   },
   card: {
-    background: 'var(--bg-card)',
-    border: '1px solid var(--border-subtle)',
-    borderRadius: 'var(--radius-lg)',
-    overflow: 'hidden',
-    textDecoration: 'none',
-    display: 'block',
+    background: 'var(--bg-card)', border: '1px solid var(--border-subtle)',
+    borderRadius: 'var(--radius-lg)', overflow: 'hidden',
+    textDecoration: 'none', display: 'block',
+    boxShadow: 'var(--shadow-sm)',
+    transition: 'box-shadow 0.2s ease, transform 0.15s ease',
   },
   cardImage: {
-    height: '140px',
-    background: 'var(--bg-elevated)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
-    overflow: 'hidden',
+    height: '140px', background: 'var(--bg-elevated)',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    position: 'relative', overflow: 'hidden',
   },
   cardInitials: {
-    fontSize: '28px',
-    fontWeight: 300,
-    color: 'var(--text-muted)',
-    fontStyle: 'italic',
+    fontSize: '28px', fontWeight: 300, color: 'var(--text-muted)', fontStyle: 'italic',
   },
   favBadge: {
-    position: 'absolute',
-    top: '8px',
-    right: '8px',
-    width: '24px',
-    height: '24px',
-    background: 'rgba(201,169,110,0.2)',
-    borderRadius: '50%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '11px',
-    color: 'var(--accent)',
+    position: 'absolute', top: '8px', right: '8px',
+    width: '24px', height: '24px', background: 'var(--accent-dim)',
+    borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+    fontSize: '11px', color: 'var(--accent)',
   },
-  cardInfo: {
-    padding: '12px',
-  },
-  cardBrand: {
-    fontSize: '11px',
-    color: 'var(--text-muted)',
-    textTransform: 'uppercase',
-    letterSpacing: '0.5px',
-    marginBottom: '3px',
-  },
-  cardName: {
-    fontSize: '14px',
-    color: 'var(--text-primary)',
-    fontWeight: 500,
-    lineHeight: 1.3,
-  },
-  cardRating: {
-    fontSize: '11px',
-    color: 'var(--accent)',
-    marginTop: '4px',
-  },
+  cardInfo:   { padding: '12px' },
+  cardBrand:  { fontSize: '11px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '3px' },
+  cardName:   { fontSize: '14px', color: 'var(--text-primary)', fontWeight: 500, lineHeight: 1.3 },
+  cardRating: { fontSize: '11px', color: 'var(--accent)', marginTop: '4px' },
   empty: {
-    textAlign: 'center',
-    padding: '60px 24px',
-    background: 'var(--bg-card)',
-    border: '1px solid var(--border-subtle)',
+    textAlign: 'center', padding: '60px 24px',
+    background: 'var(--bg-card)', border: '1px solid var(--border-subtle)',
     borderRadius: 'var(--radius-xl)',
   },
 }
